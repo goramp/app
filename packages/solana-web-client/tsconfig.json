@@ -1,0 +1,21 @@
+{
+    "extends": "@tsconfig/node12/tsconfig.json",
+    "compilerOptions": {
+      "outDir": "./lib",
+      "target": "esnext",
+      "module": "esnext",
+      "allowJs": true,
+      "checkJs": true,
+      "declaration": true,
+      "declarationDir": "declarations",
+      "esModuleInterop": true,
+      "declarationMap": true,
+      "noImplicitAny": false,
+      "moduleResolution": "node",
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "sourceMap": true,
+      "baseUrl": "src",
+    },
+    "include": ["src"]
+  }

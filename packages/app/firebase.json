@@ -1,0 +1,124 @@
+{
+  "hosting": [
+    {
+      "target": "kurobi_beta_web",
+      "public": "build/web",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "headers": [
+        {
+          "source": "/.well-known/apple-app-site-association",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "source": "/.well-known/assetlinks",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        { "source":"/flutter_service_worker.js", "headers": [{"key": "Cache-Control", "value": "no-cache"}] }
+      ],
+      "rewrites": [
+        {
+          "source": "/.well-known/apple-app-site-association",
+          "destination": "/.well-known/apple-app-site-association.json"
+        },
+        {
+          "source": "/.well-known/assetlinks",
+          "destination": "/.well-known/assetlinks.json"
+        },
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "target": "kuro_dev_web_app",
+      "public": "build/web",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "headers": [
+        {
+          "source": "/.well-known/apple-app-site-association",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "source": "/.well-known/assetlinks",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        { "source":"/flutter_service_worker.js", "headers": [{"key": "Cache-Control", "value": "no-cache"}] }
+      ],
+      "rewrites": [
+        {
+          "source": "/.well-known/apple-app-site-association",
+          "destination": "/.well-known/apple-app-site-association.json"
+        },
+        {
+          "source": "/.well-known/assetlinks",
+          "destination": "/.well-known/assetlinks.json"
+        },
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "target": "gotok_dev_web_app",
+      "public": "build/web",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "headers": [
+        {
+          "source": "/.well-known/apple-app-site-association",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "source": "/.well-known/assetlinks",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        { "source":"/flutter_service_worker.js", "headers": [{"key": "Cache-Control", "value": "no-cache"}] }
+      ],
+      "rewrites": [
+        {
+          "source": "/.well-known/apple-app-site-association",
+          "destination": "/.well-known/apple-app-site-association.json"
+        },
+        {
+          "source": "/.well-known/assetlinks",
+          "destination": "/.well-known/assetlinks.json"
+        },
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="245px" height="245px" viewBox="0 0 245 245" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ended-light</title>
+    <defs>
+        <linearGradient x1="56.5396502%" y1="63.3269269%" x2="54.7074238%" y2="38.5279738%" id="linearGradient-1">
+            <stop stop-color="#F0F5FF" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="47.9510891%" y1="50.1307719%" x2="47.9577815%" y2="49.8391748%" id="linearGradient-2">
+            <stop stop-color="#EDF0F9" stop-opacity="0.79" offset="34.8958%"></stop>
+            <stop stop-color="#9197B0" stop-opacity="0.51" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="56.5394558%" y1="50.8096297%" x2="56.4278912%" y2="49.3004097%" id="linearGradient-3">
+            <stop stop-color="#F0F5FF" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="47.9510204%" y1="90.7038513%" x2="47.9510204%" y2="-0.0474293303%" id="linearGradient-4">
+            <stop stop-color="#EDF0F9" stop-opacity="0.79" offset="34.8958%"></stop>
+            <stop stop-color="#9197B0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="56.5394558%" y1="50.6063855%" x2="56.4557823%" y2="49.4760419%" id="linearGradient-5">
+            <stop stop-color="#F0F5FF" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ended-light">
+            <circle id="Oval" fill-opacity="0.69" fill="#F3F6FF" fill-rule="nonzero" cx="122.5" cy="122.5" r="122.5"></circle>
+            <polygon id="Path" fill="url(#linearGradient-1)" fill-rule="nonzero" points="189.741 114.174 55.2598 114.174 55.2598 192.116 189.741 192.116"></polygon>
+            <polygon id="Path" fill="url(#linearGradient-2)" fill-rule="nonzero" opacity="0.45" points="189.741 114.174 55.2598 114.174 55.2598 121.797 189.741 121.797"></polygon>
+            <polygon id="Path" fill="url(#linearGradient-3)" fill-rule="nonzero" points="196 93.1729 49 93.1729 49 114.173 196 114.173"></polygon>
+            <polygon id="Path" fill="url(#linearGradient-4)" fill-rule="nonzero" opacity="0.45" points="196 93.1729 49 93.1729 49 94.2271 196 94.2271"></polygon>
+            <polygon id="Path" fill="url(#linearGradient-5)" fill-rule="nonzero" points="173.335 75 122.5 75 71.6661 75 49 93.1734 122.5 93.1734 196 93.1734"></polygon>
+            <polygon id="Path" fill="#C5CEE3" fill-rule="nonzero" points="155.886 84.2365 89.1133 84.2365 92.8891 81.209 152.109 81.209"></polygon>
+            <polygon id="Path" fill="#D4DBEB" fill-rule="nonzero" points="154.753 84.237 90.248 84.237 92.8907 82.1182 152.111 82.1182"></polygon>
+            <polygon id="Path" fill="#C5CEE3" fill-rule="nonzero" points="152.111 81.209 92.8906 81.209 92.8906 82.1176 152.111 82.1176"></polygon>
+            <path d="M103.48,168.574 C102.969,169.416 103.237,170.512 104.079,171.023 C104.92,171.534 106.017,171.266 106.528,170.425 L103.48,168.574 Z M138.883,170.243 C139.294,171.138 140.352,171.531 141.247,171.12 C142.142,170.71 142.535,169.652 142.124,168.757 L138.883,170.243 Z M106.528,170.425 C110.381,164.078 117.208,161.299 123.816,161.531 C130.481,161.765 136.494,165.028 138.883,170.243 L142.124,168.757 C139.014,161.971 131.527,158.234 123.941,157.968 C116.3,157.7 108.127,160.922 103.48,168.574 L106.528,170.425 Z" id="Shape" fill="#EDF1F9" fill-rule="nonzero"></path>
+            <circle id="Oval" fill="#EDF1F9" fill-rule="nonzero" cx="98.5" cy="150.591" r="4.5"></circle>
+            <line x1="84" y1="141.546" x2="91.86" y2="136" id="Path" stroke="#EDF1F9" stroke-width="4" stroke-linecap="round"></line>
+            <circle id="Oval" fill="#EDF1F9" fill-rule="nonzero" transform="translate(144.500000, 150.591000) scale(-1, 1) translate(-144.500000, -150.591000) " cx="144.5" cy="150.591" r="4.49965"></circle>
+            <line x1="159.789" y1="141.546" x2="151.929" y2="136" id="Path" stroke="#EDF1F9" stroke-width="4" stroke-linecap="round"></line>
+        </g>
+    </g>
+</svg>

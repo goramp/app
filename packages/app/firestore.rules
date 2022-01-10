@@ -1,0 +1,471 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+      // allow read, write: if request.auth != null;
+    }
+    match /presence/{userId} {
+      allow write: if request.auth.uid == userId;
+      allow read: if auth != null;
+    }
+    match /payment_settings/{userId} {
+      allow read: if request.auth.uid == userId;
+    }
+    match /patterns/{patternId} {
+      allow read: if request.auth.uid != null;
+    }
+    match /payment_settings/{userId} {
+      match /providers/{providerId} {
+        allow read: if request.auth.uid == userId;
+      }
+    }
+    match /user_contributions/{userId} {
+      match /contributions/{contributionId} {
+        allow read: if request.auth.uid == userId;
+      }
+    }
+    match /kyc/{userId} {
+      allow read: if request.auth.uid == userId;
+    }
+
+    match /payment_providers/{paymentProviderId} {
+      allow read: if request.auth.uid != null;
+    }
+    match /settings/{userId} {
+      allow read, write: if request.auth.uid == userId;
+    }
+    match /rates/{coin} {
+      allow read: if request.auth != null;
+    }
+    match /fiat_rates/{coin} {
+      allow read: if request.auth != null;
+    }
+    match /markets/{marketId} {
+      allow read: if request.auth != null;
+    }
+    match /contributions/{contributionId} {
+      allow read: if request.auth != null;
+    }
+    match /tags/{tagId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+    }
+
+    match /links/{linkId} {
+      function canCreate() {
+        return request.auth.uid != null && request.auth.uid == request.resource.data.userId;
+      }
+      allow read: if request.auth.uid != null;
+      allow create: if canCreate();
+    } 
+
+    match /home/{orderId} {
+      allow read: if request.auth.uid != null && request.auth.uid == resource.data.customer.userId;
+    } 
+
+    match /{path=**}/liked_call_links/{linkId} {
+      function canReadByUsername() {
+        let profile = get(/databases/$(database)/documents/profiles/$(request.auth.uid)).data;
+        return profile.username == resource.data.likedByUsername; 
+      }
+      function isOwner() {
+        return (request.auth.uid == resource.data.likedByUserId) || canReadByUsername(); 
+      }
+      function isSignedIn() {
+        return request.auth.uid != null; 
+      }
+      function canRead() {
+        return isSignedIn() && isOwner(); 
+      }
+      allow read: if canRead();
+    }
+
+    match /{path=**}/availabilities/{availabilityId} {
+      allow read: if request.auth.uid != null;
+    }
+    match /{path=**}/reservations/{reservationId} {
+      allow read: if request.auth.uid != null;
+    }
+
+    match /in_app_purchases/{storeCode} {
+      allow read: if request.auth.uid != null;
+      match /products/{productId} {
+        allow read: if request.auth.uid != null;
+      }
+    }
+
+    match /in_app_purchases/{storeCode} {
+      allow read: if request.auth.uid != null;
+      match /products/{productId} {
+        allow read: if request.auth.uid != null;
+      }
+    }
+
+    match /transactions/{transactionId} {
+      allow read: if request.auth.uid == resource.data.userId; 
+    }
+
+    match /customers/{userId} {
+      match /providers/{providerId} {
+        allow read: if request.auth.uid == userId;
+        match /payment_methods/{payment_method_id} {
+          allow read: if request.auth.uid == userId;
+        }
+      }
+    }
+
+    match /profiles/{userId} {
+      function canUpdatePhoto() {
+        return (request.resource.data.photoId == resource.data.photoId && 
+        request.resource.data.photoUrl == resource.data.photoUrl &&
+        request.resource.data.photoDisplayUrl == resource.data.photoDisplayUrl &&
+        request.resource.data.photoEnabled == resource.data.photoEnabled)
+          ||
+        (
+        request.resource.data["photoId"] == null &&
+        request.resource.data["photoUrl"] == null &&
+        request.resource.data["photoDisplayUrl"] == null &&
+        request.resource.data["photoEnabled"] == null
+        ) || 
+        (
+        !request.resource.data.keys().hasAll(["photoId","photoUrl","photoDisplayUrl","photoEnabled"]) &&
+        !resource.data.keys().hasAll(["photoId","photoUrl","photoDisplayUrl","photoEnabled"])
+        );
+      }
+      function canUpdate() {
+        return request.auth.uid == userId && userId == request.resource.data.uid && 
+        request.resource.data.uid == resource.data.uid &&
+        request.resource.data.createdAt == resource.data.createdAt &&
+        request.resource.data.emailVerified == resource.data.emailVerified &&
+        canUpdatePhoto() &&
+        request.resource.data.username == resource.data.username;
+      }
+
+      allow read: if true;
+      allow update: if canUpdate();
+
+      match /photos/{photoId} {
+        allow read,delete: if request.auth.uid == userId;
+      }
+
+      match /liked_call_links/{linkId} {
+        function canUpdate() {
+          return request.auth.uid == userId && 
+          (
+          exists(/databases/$(database)/documents/call_links/$(linkId)) &&
+          get(/databases/$(database)/documents/call_links/$(linkId)).data.hostId != userId
+          );
+        }
+        allow read: if request.auth.uid == userId;
+        allow create,update: if canUpdate();
+        allow delete: if request.auth.uid == userId;
+      }
+
+      match /video_processing/{fileame} {
+        allow read: if request.auth.uid == userId;
+      } 
+
+      match /voip_tokens/{tokenId} {
+        allow read, write: if request.auth.uid == userId;
+      }
+
+      match /messaging_tokens/{tokenId} {
+        allow read, write: if request.auth.uid == userId;
+      }
+    }
+
+    match /reward_claims/{claimId} {
+      allow read: if request.auth.uid != null;
+    }
+    
+    match /call_links/{callLinkId} {
+    // function isOwner() {
+      //   return (
+      //   	request.auth.uid != null && request.auth.uid == resource.data.hostId
+      //   );
+      // }
+      function canPublish() {
+        return (
+        request.auth.uid != null && request.auth.uid == resource.data.hostId &&
+        request.resource.data.published is bool &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(["published"])
+        );
+      }
+
+      function canDelete() {
+        return (
+        isOwner() && 
+        (
+        !resource.data.keys().hasAll(['callsCount']) ||
+        resource.data.callsCount == null ||
+        resource.data.callsCount == 0
+        )
+        );
+      }
+
+      function canPublicRead() {
+        return (resource.data.published == true && resource.data.enabled == true);
+      }
+
+      function isHost() {
+        return (resource.data.hostId == request.auth.uid) || 
+        (resource.data.hostUsername == get(/databases/$(database)/documents/profiles/$(request.auth.uid)).data.username)
+      }
+
+      function isOwner() {
+        return (resource.data.ownerId == request.auth.uid)
+      }
+      
+      function hasRequestedFeatured(){
+      return (resource.data.requestfeature == true && 
+      resource.data.reviewstatus != null && 
+      get(/databases/$(database)/documents/users/$(request.auth.uid)).data.admin) == true
+      }
+      
+      function hasRequestedReported(){
+      return (resource.data.reportcount != null && resource.data.reportstatus != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.admin == true)
+      }
+      
+      function hasRequestedByStatus(){
+      return (resource.data.status != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.admin == true)
+      }
+
+      allow read: if (isOwner() || isHost() || canPublicRead() || hasRequestedFeatured() || hasRequestedReported() || hasRequestedByStatus());
+      allow delete: if canDelete();
+      allow update: if canPublish();
+
+      match /availabilities/{availabilityId} {
+        function isOwner() {
+          return request.auth.uid != null && request.auth.uid == get(/databases/$(database)/documents/call_links/$(request.resource.data.linkId)).data.hostId;
+        }
+        function canCreate() {
+          return request.auth.uid != null && 
+          request.auth.uid == request.resource.data.createdBy && 
+          request.resource.data.linkId == callLinkId &&
+          (
+          !exists(/databases/$(database)/documents/call_links/$(request.resource.data.linkId)) || 
+          get(/databases/$(database)/documents/call_links/$(request.resource.data.linkId)).data.hostId == request.auth.uid
+          );
+        }
+        function canUpdate() {
+          return (
+          request.auth.uid != null &&
+          request.auth.uid == request.resource.data.createdBy &&
+          request.auth.uid == resource.data.createdBy &&
+          request.auth.uid == get(/databases/$(database)/documents/call_links/$(request.resource.data.linkId)).data.hostId &&
+          request.resource.data.linkId == callLinkId && 
+          request.resource.data.linkId == resource.data.linkId
+          );
+        }
+        allow read: if request.auth.uid != null;
+        allow create: if canCreate();
+        allow update: if canUpdate();
+      }
+
+      match /counters/{counterId} {
+        allow read: if get(/databases/$(database)/documents/call_links/$(callLinkId)).data.hostId == request.auth.uid;
+      }
+    }
+
+    match /video_preview/{callLinkId} {
+      function isOwner() {
+        return (
+        get(/databases/$(database)/documents/call_links/$(callLinkId)).data.hostId == request.auth.uid
+        );
+      }
+      allow read: if isOwner();
+    }
+
+    match /calls/{callId} {
+      function isHost() {
+        return request.auth.uid != null && request.auth.uid == resource.data.hostId;
+      }
+      function isGuest() {
+        return request.auth.uid != null && request.auth.uid == resource.data.guestId;
+      }
+      function canRead() {
+        return request.auth.uid in resource.data.participants;
+      }
+      allow read: if canRead();
+      function isParticipant(userId) {
+        return userId != null && userId in get(/databases/$(database)/documents/calls/$(callId)).data.participants;
+      }
+      match /messages/{messageId} {
+        function isSender() {
+          return request.auth.uid != null && request.auth.uid == request.resource.data.from && 
+          isParticipant(request.auth.uid);
+        }
+        function canCreate() {
+          return isSender() && 
+          request.resource.data.to != request.auth.uid &&
+          isParticipant(request.resource.data.to);
+        }
+        allow read: if request.auth.uid != null && isParticipant(request.auth.uid);
+        allow create: if canCreate();
+        allow delete: if isSender();
+      }
+      match /joins/{userId} {
+        allow read: if isParticipant(request.auth.uid);
+      }
+      match /participants/{userId} {
+        allow read: if isParticipant(request.auth.uid);
+      }
+    }
+
+    match /iap_credits/{userId} {
+      allow read: if request.auth.uid == userId;
+    }
+
+    match /store_receipts/{storeCode} {
+      function validCreate() {
+        return !(request.resource.data.keys().hasAll(["complete"]));
+      }
+
+      function validUpdate() {
+        return request.resource.data.complete == resource.data.complete
+          || (valid_create()
+          && !(resource.data.keys().hasAll(["complete"])))
+      }
+      match /receipts/{receiptId} {
+        allow read: if request.auth.uid != null && request.auth.uid == resource.data.userId;
+        allow create: if request.auth.uid != null && 
+        request.auth.uid == request.resource.data.userId &&
+        validCreate();
+      }
+    }
+
+    match /files/{userId} {
+      match /images/{imageId} {
+        allow read, delete: if request.auth.uid == userId;
+      }
+    }
+
+    match /users/{userId} {
+      function canUpdateImage() {
+        return request.resource.data.image == resource.data.image ||
+        (
+        !request.resource.data.keys().hasAll(["image"]) && 
+        !resource.data.keys().hasAll(["image"])
+        );
+      }
+      function canUpdate() {
+        return request.auth.uid == userId && userId == request.resource.data._id &&
+        request.resource.data._id == resource.data._id &&
+        request.resource.data.username == resource.data.username &&
+        request.resource.data.passwordHash == resource.data.passwordHash &&
+        canUpdateImage() &&
+        request.resource.data.salt == resource.data.salt;
+      }
+      allow update: if canUpdate();
+      allow read: if request.auth.uid == userId;
+
+      match /cards/{cardId} {
+        allow read, delete: if request.auth.uid == userId;
+      }
+
+      match /activities/{activityId} {
+        allow read, write: if request.auth.uid == userId;
+      }
+
+      match /wallets/{walletId} {
+        allow read: if request.auth.uid == userId;
+      }
+
+      match /friends/{userId} {
+        allow read, write: if request.auth.uid == userId;
+      }
+
+      match /invites/{inviteId} {
+        function validate() {
+          return request.resource.data.fromUserName is string
+        }
+        allow read: if request.auth != null &&
+        (request.auth.uid == userId || resource.data.fromUserId == request.auth.uid) 
+        allow create: if request.auth != null && 
+        request.auth.uid != userId && 
+        request.resource.data.fromUserId == request.auth.uid &&
+        exists(/databases/$(database)/documents/rooms/$(request.resource.data.roomId)) && 
+        validate()
+        allow update: if request.auth.uid != null && 
+        resource.data.fromUserId == request.resource.data.fromUserId &&
+        resource.data.roomId == request.resource.data.roomId &&
+        (
+        request.auth.uid == userId || 
+        resource.data.fromUserId == request.auth.uid
+        ) &&
+        validate()
+        allow delete: if request.auth.uid != null && 
+        (
+        request.auth.uid == userId || 
+        resource.data.fromUserId == request.auth.uid
+        ) 
+      }
+    }
+
+    match /invites/{inviteId} {
+      allow read: if request.auth != null &&
+      resource.data.fromUserId == request.auth.uid ||
+      (resource.data.toUserId == null || resource.data.toUserId == request.auth.uid)
+      allow create: if request.auth != null && 
+      request.resource.data.fromUserId == request.auth.uid &&
+      request.resource.data.toUserId == null && 
+      request.resource.data.acceptedAt == null &&
+      request.resource.data.createdAt != null &&
+      request.resource.data.createdAt is timestamp
+      allow update: if request.auth.uid != null && 
+      resource.data.fromUserId == request.resource.data.fromUserId &&
+      resource.data.toUserId == null &&
+      resource.data.acceptedAt == null &&
+      request.resource.data.acceptedAt != null &&
+      request.resource.data.acceptedAt is timestamp
+      allow delete: if request.auth.uid != null && 
+      (
+      resource.data.fromUserId == request.auth.uid  || 
+      resource.data.toUserId == request.auth.uid
+      ) 
+    }
+
+    match /status/{userId} {
+      allow read: if request.auth != null;
+    }
+
+    match /calls/{callId} {
+
+      function isParticipant() {
+        return (
+        resource.data.keys().hasAny(['participants']) && 
+        resource.data.participants.keys().hasAny([request.auth.uid]) &&
+        resource.data.participants[request.auth.uid] != null
+        );
+      }
+
+      function isAuthorized() {
+        return (
+        resource.data.initiator == request.auth.uid || 
+        (
+        resource.data.keys().hasAny(['responder']) && 
+        resource.data.responder == request.auth.uid
+        ) || 
+        isParticipant() || 
+        isPublicCall()
+        );
+      }
+
+      function isPublicCall() {
+        return resource.data.type == "public-group";
+      }
+
+      allow read: if request.auth != null && isAuthorized();
+
+      allow create: if request.auth != null && 
+      request.resource.data.keys().hasAll(["type", "initiator", "createdAt", "updatedAt"]) &&
+      request.resource.data.type in ["one-on-one", "private-group", "public-group"] &&
+      request.resource.data.keys().hasAny(['participants','sessions']) == false
+
+      match /messages/{messageId} {
+        allow read, write: if request.auth != null && isParticipant();
+      }
+    }
+  }
+}

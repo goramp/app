@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">kurobi</string>
+    <string name="app_scheme">kurobi</string>
+    <string name="answer_call">Answer</string>
+    <string name="reject_call">Reject</string>
+    <string name="facebook_app_id">384554333075061</string>
+    <string name="fb_login_protocol_scheme">fb384554333075061</string>
+</resources>

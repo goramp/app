@@ -1,0 +1,20 @@
+{
+	"applinks": {
+		"details": [
+			{
+				"appID": "R3Q2RG6HRA.io.goramp",
+				"components": [
+					{
+						"/": "/*",
+						"comment": "Matches any URL whose path starts with /callback/email/"
+					}
+				]
+			}
+		]
+	},
+	"webcredentials": {
+		"apps": [
+			"R3Q2RG6HRA.io.goramp"
+		]
+	}
+}
